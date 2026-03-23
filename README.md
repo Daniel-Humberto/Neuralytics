@@ -119,7 +119,7 @@ Apoyado en arquitectura **RAG estricta** (Qdrant + Ollama GPU). Regla de oro: **
 
 ## Arquitectura del Sistema
 
-![Img— Arquitectura de la solución](./Architecture.svg)
+![Img— Arquitectura de la solución](./Imagenes/Architecture.svg)
 
 
 ---
