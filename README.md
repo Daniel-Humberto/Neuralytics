@@ -238,8 +238,6 @@ El sistema se despliega mediante un único `docker-compose.yml` administrado por
 | `cadvisor` | Monitoreo de métricas por contenedor → Prometheus |
 | `grafana` | Dashboards de observabilidad, alertas y KPIs operativos |
 
-**Total: ~24 contenedores** administrados por IaC reproducible en cualquier entorno.
-
 
 ---
 
