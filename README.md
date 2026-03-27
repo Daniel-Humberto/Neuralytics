@@ -1,1078 +1,681 @@
-# 🥇 Neuralytics
+<div align="center">
+
+![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:00d2b4,100:2d004f&height=180&section=header&text=Neuralytics%20-%20CareFlow%20360%C2%B0&fontSize=36&fontColor=ffffff&animation=twinkling&fontAlignY=38&desc=Talent%20Hackathon%202026%20%7C%20Salud%20Digna%20%7C%20Atencion%20360%C2%B0%20en%20Tiempo%20Real&descAlignY=60&descAlign=50)
+
+</div>
 
 
 ---
 
 
-### *El sistema operativo de atención al paciente*
-
-> **(Uber + Waze + Alexa) para Clínicas — Talent Hackathon 2026 · Track Salud Digna · Atención 360° en Tiempo Real**
-
-
----
-
-
-## Índice
-
-1. [El Problema](#el-problema)
-2. [La Solución](#la-solución)
-3. [Analogías Clave](#analogías-clave)
-4. [Arquitectura del Sistema](#arquitectura-del-sistema)
-5. [Stack Tecnológico](#stack-tecnológico)
-6. [Lógica de Negocio en el Backend](#lógica-de-negocio-en-el-backend)
-7. [APIs del Sistema](#apis-del-sistema)
-8. [Perfiles de Usuario](#perfiles-de-usuario)
-9. [Tracking del Paciente en Clínica](#tracking-del-paciente-en-clínica)
-10. [Aprovechamiento de Tiempos Muertos](#aprovechamiento-de-tiempos-muertos)
-11. [Data Science & Modelos ML](#data-science--modelos-ml)
-12. [IA Conversacional — El Asistente](#ia-conversacional--el-asistente)
-13. [Observabilidad y Monitoreo](#observabilidad-y-monitoreo)
-14. [Seguridad y Soberanía de Datos](#seguridad-y-soberanía-de-datos)
-15. [Infraestructura y Despliegue](#infraestructura-y-despliegue)
-16. [KPIs y Métricas de Éxito](#kpis-y-métricas-de-éxito)
-17. [Roadmap del Hackathon](#roadmap-del-hackathon)
+<p align="center">
+  <img src="Imagenes/0.png"
+       alt="Arquitectura del sistema"
+       width="900"
+       style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.18);">
+</p>
 
 
 ---
 
 
-## El Problema
+## Tabla de Contenidos
 
-Actualmente, la experiencia del paciente en las clínicas de Salud Digna está **fragmentada y llena de puntos ciegos**. La falta de comunicación en tiempo real entre áreas genera:
-
-- ⏳ Tiempos de espera improductivos e inciertos
-- 📢 Carga operativa excesiva en recepción por preguntas repetitivas
-- 😤 Sensación de incertidumbre e incomunicación en el paciente
-- 🔇 Sistemas reactivos y aislados: LIS, RIS y Admisión no se hablan en tiempo real
-- ❌ Tiempos muertos que no generan ningún valor para el paciente ni para la clínica
-
-Los sistemas actuales no permiten:
-- Gestión inteligente de capacidad instalada
-- Predicción de saturación de servicios
-- Guía proactiva al paciente sobre su siguiente paso
-- Transformar la espera en una experiencia de salud proactiva
+1. [Resumen del Proyecto](#1-resumen-del-proyecto)
+2. [El Problema](#2-el-problema)
+3. [La Solución: Arquitectura de Tres Capas](#3-la-solución-arquitectura-de-tres-capas)
+4. [Arquitectura del Sistema](#4-arquitectura-del-sistema)
+5. [Stack Tecnológico](#5-stack-tecnológico)
+6. [Contenedores Docker](#6-contenedores-docker)
+7. [Lógica de Negocio — Backend](#7-lógica-de-negocio--backend)
+8. [Lógica de Negocio — Frontend](#8-lógica-de-negocio--frontend)
+9. [Perfiles de Usuario e Interfaces](#9-perfiles-de-usuario-e-interfaces)
+10. [Agentes de Inteligencia Artificial](#10-agentes-de-inteligencia-artificial)
+11. [Algoritmos de Data Science](#11-algoritmos-de-data-science)
+12. [Bus de Eventos y Flujo de Datos](#12-bus-de-eventos-y-flujo-de-datos)
+13. [Flujo del Trayecto del Paciente](#13-flujo-del-trayecto-del-paciente)
+14. [Cumplimiento Legal y Regulatorio](#14-cumplimiento-legal-y-regulatorio)
+15. [KPIs e Impacto Proyectado](#15-kpis-e-impacto-proyectado)
+16. [Infraestructura como Código](#16-infraestructura-como-código)
+17. [Filosofía del Proyecto](#17-filosofía-del-proyecto)
+18. [Equipo Neuralytics](#18-equipo-neuralytics)
 
 
 ---
 
 
-## La Solución
+## 1. Resumen del Proyecto
 
-**Ruta Digna 360** es el sistema operativo de atención al paciente de extremo a extremo (end-to-end). No es solo un chatbot ni solo un modelo de ML — es una capa de orquestación inteligente que conecta cada área de la clínica y acompaña al paciente durante toda su visita, igual que Uber acompaña cada viaje.
+**CareFlow 360°** es una capa de orquestación inteligente no invasiva diseñada para transformar la experiencia del paciente en la red de clínicas de **Salud Digna** (+240 sucursales, 32 estados, 4 países) sin necesidad de reemplazar ningún sistema existente.
 
-Ruta Digna 360 no reemplaza ningún sistema existente. Se integra como capa de orquestación sobre infraestructura que Salud Digna ya opera: el LIS automatizado al 100% en microbiología, las órdenes médicas digitales, el canal WhatsApp Business ya activo para comunicación con médicos, y los tableros de analítica existentes. La integración es no invasiva, expone endpoints que los sistemas actuales pueden llamar mediante webhook sin modificar su arquitectura interna. partimos de una infraestructura seria y la convertimos en un copiloto clínico real
+El sistema conecta los silos operativos independientes (Admisión, Laboratorio, Imagenología) a través de un bus de eventos en tiempo real, aplica modelos predictivos de Machine Learning para estimación de tiempos de espera (ETA), y ofrece asistencia conversacional hiperpersonalizada mediante un sistema MultiAgent RAG con LLM local en GPU.
 
+La inspiración conceptual converge en tres paradigmas de experiencia digital que el usuario ya conoce:
 
-### Objetivos finales
-
-| Eje | Objetivo |
+| Plataforma | Aportación a CareFlow 360° |
 |---|---|
-| 🧑‍⚕️ Paciente | Informado, sin incertidumbre, con control de su tiempo |
-| 👩‍💼 Personal | Asistido por IA, con sugerencias operativas en tiempo real |
-| 🏥 Clínica | Optimizada, con capacidad instalada gestionada inteligentemente |
+| **Uber** | Fila virtual con trazabilidad end-to-end y estimación precisa de tiempos |
+| **Waze** | Predicción y optimización de saturaciones y cuellos de botella |
+| **Alexa** | Asistencia conversacional 24/7 hiperpersonalizada, vía voz y texto |
 
 
 ---
 
 
-## Analogías Clave
+## 2. El Problema
 
-
----
-
-
-### 🚗 UBER — Conexión y Trazabilidad de Extremo a Extremo
-
-Cuando el paciente llega a cualquier clínica de Salud Digna para un estudio o consulta, se le asigna un **token de trayecto** y el viaje comienza. A través de WhatsApp, el sistema orquesta PostgreSQL y Redis para mantener un estado en tiempo real. El paciente sabe exactamente en qué fase está:
+Salud Digna opera bajo una arquitectura modular y distribuida — LIS (laboratorio), RIS/PACS (imagenología) y un HIS ligero para admisión — donde cada área funciona como un silo independiente. No existe un flujo de eventos compartido ni una capa de orquestación que sincronice las operaciones hacia el paciente en tiempo real.
 
 ```
-"En espera para Toma de Muestra"  →  "Estudio en progreso"  →  "Resultados listos"
+MAPA DEL TRAYECTO ACTUAL
+
+  [Paciente llega]
+         │
+         ▼
+  [Recepción / Admisión] ──── [HIS: registro + orden de servicio]
+         │
+         ▼
+  [Sala de espera] ◄───────── ⚠️ PUNTO CIEGO #1
+         │                         Sin información de espera
+         ▼
+  [Llamado al área] ◄──────── ⚠️ PUNTO CIEGO #2
+         │                         Sin guía del siguiente paso
+         ▼
+  [Toma de muestra / estudio]
+         │
+         ▼
+  [Espera resultado] ◄─────── ⚠️ PUNTO CIEGO #3
+         │                         Sin retroalimentación en tiempo real
+         ▼
+  [Entrega de resultado]
+
+  [Recepción] ─── ❌ ─── [Laboratorio] ─── ❌ ─── [Imagenología]
+         └──────────── ❌ ────────── [Paciente]
 ```
 
-Para el administrador: visibilidad total de la capacidad instalada frente a la demanda actual.
+Las consecuencias operativas son saturación no anticipada, carga excesiva en recepción, incertidumbre del paciente y capacidad instalada subutilizada.
 
 
 ---
 
 
-### 🗺️ WAZE — Navegación Inteligente y Optimización Predictiva
+## 3. La Solución: Arquitectura de Tres Capas
 
-El modelo de Data Science (XGBoost + Isolation Forest) lee el flujo de pacientes actualizando estados. Si detecta que el área de Ultrasonido tiene un pico de demanda inusual, el sistema **recalcula los ETAs automáticamente** y notifica al paciente de inmediato. En el backend, sugiere a los coordinadores redistribuir al personal disponible al Recalcular rutas, Evita saturación, Optimiza tiempos.
-
-
----
+CareFlow 360° se estructura en tres capas que se construyen una sobre la otra y pueden desplegarse incrementalmente.
 
 
-### 🤖 ALEXA — Asistencia Conversacional con Guardrails
-
-Chatbot accesible por **WhatsApp, Telegram y GUI Web** — los canales que el paciente ya usa, sin instalar nada. Responde dudas operativas:
-
-- *"¿Necesito ir en ayunas?"*
-- *"¿Cuánto falta para mi turno?"*
-- *"¿Dónde está el área de mastografía?"*
-
-Apoyado en arquitectura **RAG estricta** (Qdrant + Ollama GPU). Regla de oro: **cero alucinaciones**. Si detecta una consulta clínica compleja o un paciente molesto, el flujo **Human-in-the-Loop** transfiere la conversación al personal silenciosamente. Todo flujo es predefinido y auditable.
+<p align="center">
+  <img src="Imagenes/1.png"
+       alt="Arquitectura del sistema"
+       width="900"
+       style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.18);">
+</p>
 
 
 ---
 
 
-## Arquitectura del Sistema
+### Capa 1 — Sistema de Tickets y Fila Virtual
 
-![Img— Arquitectura de la solución](./Imagenes/Architecture.svg)
+La base del sistema es la fila virtual con trazabilidad end-to-end orquestada por el personal clínico. El staff controla el inicio y fin de cada fase publicando eventos al bus Redis Streams (`PATIENT_ADMITTED → STUDY_STARTED → RESULTS_READY`). Mediante un token pseudonimizado, el paciente visualiza su turno y ETA en tiempo real vía WhatsApp o la GUI web, sin instalar ninguna aplicación.
+
+
+### Capa 2 — Analítica Predictiva
+
+El motor inteligente que transforma datos operativos en conocimiento. XGBoost estima tiempos de espera con re-inferencia cada 60 segundos y latencia inferior a 100 ms. Isolation Forest detecta anomalías y picos de demanda en tiempo real. Monte Carlo genera intervalos de confianza sobre los ETAs. K-Means segmenta patrones de demanda por sucursal y horario. Apache Airflow orquesta pipelines ETL nocturnos y el reentrenamiento automático de todos los modelos.
+
+
+### Capa 3 — Agentes de IA Generativa
+
+Sistema MultiAgent RAG sobre la base de conocimiento oficial de Salud Digna con un LLM local en GPU NVIDIA, sin APIs externas para datos clínicos. LangGraph orquesta estados conversacionales con supervisión humana activa. Faster-Whisper transcribe voz en tiempo real. Human-in-the-Loop transfiere al personal en casos complejos. Todos los flujos son predefinidos, auditables y rastreables. Cumplimiento total con LFPDPPP y NOM-024.
 
 
 ---
 
 
-### Arquitecturas del Proyecto
+## 4. Arquitectura del Sistema
 
-| Capa | Arquitectura |
+<p align="center">
+  <img src="Imagenes/3.svg"
+       alt="Arquitectura del sistema"
+       width="900"
+       style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.18);">
+</p>
+
+
+---
+
+
+## 5. Stack Tecnológico
+
+
+### Hardware de Referencia (Desarrollo y Demo)
+
+| Componente | Especificación |
 |---|---|
-| **Host** | Self-Hosted / On-Premise |
-| **Software** | Microservicios (Docker Compose) |
-| **Monitoreo** | Pull-Based + Pushgateway (Prometheus) |
-| **Agentes IA** | Human in the Loop |
-| **Redes** | Red interna (tráfico privado) + Red externa (servicios públicos) |
-| **Bases de datos** | SQL (registros) · NoSQL/caché (Redis) · Vectorial (RAG) · Graph (Agentes) |
-
-
----
-
-
-## Stack Tecnológico
-
-
----
-
-
-### Contenedores del Sistema (22 servicios)
-
-
-#### 🧠 Capa de Inteligencia Artificial
-
-| Contenedor | Imagen | Función |
-|---|---|---|
-| `ollama` | `ollama/ollama:latest` (GPU) | Servidor LLM local — Llama 3, Mistral, Phi-3 |
-| `open-webui` | `ghcr.io/open-webui/open-webui` | Interfaz admin para gestión de modelos y prompts |
-| `faster-whisper` | `onerahmet/openai-whisper-asr-webservice` (GPU) | STT — transcripción de notas de voz WhatsApp |
-| `langgraph-api` | `langchain/langgraph-api` | Flujos conversacionales stateful + Human-in-the-Loop |
-| `langchain` | `langchain/langchain` | Imagen base para Python ML API (FROM en Dockerfile) |
-| `python-ml-api` | `build: ./ml_api` (FROM langchain/langchain) | FastAPI que sirve XGBoost en runtime — endpoint `/predict/eta` |
-
-
-#### 🗄️ Capa de Datos
-
-| Contenedor | Imagen | Función |
-|---|---|---|
-| `postgres` | `postgres:16` | Base de datos principal — trayectos, históricos, auditoría |
-| `pgadmin` | `dpage/pgadmin4` | UI de administración PostgreSQL |
-| `redis` | `redis:7-alpine` | Cache · Redis Streams (bus de eventos) · estado de sesión |
-| `redis-insight` | `redis/redisinsight` | UI de inspección de Redis Streams en tiempo real |
-| `qdrant` | `qdrant/qdrant` (GPU) | Base de datos vectorial para RAG del chatbot |
-
-
-#### ⚙️ Capa de Orquestación y Pipelines
-
-| Contenedor | Imagen | Función |
-|---|---|---|
-| `n8n` | `n8nio/n8n` | Orquestador de flujos de negocio — notificaciones, escalado, reasignación |
-| `airflow` | `apache/airflow:2.9` | Pipelines batch — reentrenamiento ML, ETL histórico, reportes |
-| `jupyter` | `jupyter/datascience-notebook` | Entrenamiento interactivo de modelos XGBoost, exploración de datos |
-
-
-#### 🌐 Capa de Aplicación
-
-| Contenedor | Imagen | Función |
-|---|---|---|
-| `backend` | `build: ./backend` (Node.js + Next.js) | API REST · WebSocket Server · GraphQL · Lógica de negocio |
-
-
-#### 📊 Capa de Observabilidad
-
-| Contenedor | Imagen | Función |
-|---|---|---|
-| `prometheus` | `prom/prometheus` | Recolección y almacenamiento de métricas |
-| `grafana` | `grafana/grafana` | Dashboards operativos en tiempo real |
-| `cadvisor` | `gcr.io/cadvisor/cadvisor` | Métricas de cada contenedor Docker |
-| `node-exporter` | `prom/node-exporter` | Métricas del sistema operativo host |
-| `redis-exporter` | `oliver006/redis_exporter` | Métricas de Redis hacia Prometheus |
-| `postgres-exporter` | `prometheuscommunity/postgres-exporter` | Métricas de PostgreSQL hacia Prometheus |
-| `dcgm-exporter` | `nvcr.io/nvidia/k8s/dcgm-exporter` | Métricas GPU NVIDIA (VRAM, utilización, temperatura) |
+| Sistema Operativo | Ubuntu 24.04 LTS |
+| CPU | Intel Core i5-12500H (12th Gen) |
+| RAM | 16 GB DDR5 |
+| GPU | NVIDIA RTX 4050 (6 GB VRAM) |
+| IoT (experimental) | ESP32 — Nodo WiFi CSI para estimación de ocupación |
+| Orquestación | Docker Compose (IaC) |
 
 
 ### Frameworks y Lenguajes
 
-```
-Frontend:    React + TypeScript + JavaScript +  Shadcn/ui + Tailwind CSS + Plotly
-Backend:     Node.js + Next.js + Express.js + TypeScript + Python
-Data:        Python (pandas, scikit-learn, XGBoost, LightGBM)
-IaC:         Docker Compose + Shell Script (.sh)
-```
-
-
-### Compatibilidad con Proveedores LLM Cloud
-
-El sistema es compatible con proveedores cloud como alternativa o complemento al LLM local:
-
-| Proveedor | Modelos compatibles |
+| Capa | Tecnología |
 |---|---|
-| **Anthropic** | Claude 3.5 Sonnet, Claude 3 Opus |
-| **OpenAI** | GPT-4o, GPT-4, GPT-3.5-Turbo |
-| **Google** | Gemini Pro, Gemini Flash |
-| **AWS / Azure** | Bedrock, Azure OpenAI |
-| **OpenRouter** | API unificada multi-modelo |
+| **Frontend** | Next.js · React · Shadcn/ui · Tailwind CSS · Plotly · TypeScript · JavaScript |
+| **Backend** | Node.js · Express.js · JavaScript · Python |
+| **Data Science** | Python · JupyterNotebook · Apache Airflow |
+| **Agentes IA** | LangChain · LangGraph · N8N |
+| **ML API** | FastAPI (Python) |
+| **Inferencia LLM** | Ollama + GPU NVIDIA (Llama 3) |
+| **Voz** | Faster-Whisper (Speech-to-Text, GPU) |
+| **Vector DB** | Qdrant GPU |
+| **RAG Pipeline** | Haystack |
+| **Event Bus** | Redis Streams |
+| **Auth** | JWT |
 
-> La elección entre local (Ollama) y cloud depende de la naturaleza del dato a procesar. Datos clínicos sensibles → local. Contenido educativo genérico → cloud opcional.
+
+### Capas del Stack
+
+```
+┌─ Interfaces ─────────────────────────────────────────────────────┐
+│  WhatsApp / Telegram · Next.js + React (Web)                     │
+│  GUI Personal (Tablet) · GUI Admin (Control Tower)               │
+├─ Backend Central ────────────────────────────────────────────────┤
+│  Node.js + Express.js · REST API + WebSocket · FastAPI (ML API)  │
+├─ Orquestación ───────────────────────────────────────────────────┤
+│  N8N (automatización) · LangGraph (agentes) · Airflow (ETL)      │
+│  Redis Streams (eventos)                                         │
+├─ IA Generativa ──────────────────────────────────────────────────┤
+│  Ollama GPU (Llama 3) · Faster-Whisper STT · LangChain · Haystack│
+├─ Data Science ───────────────────────────────────────────────────┤
+│  XGBoost / LightGBM · Isolation Forest · Monte Carlo · K-Means   │
+├─ Bases de Datos ─────────────────────────────────────────────────┤
+│  PostgreSQL (SQL) · Redis Caché + Streams · Qdrant (vectorial)   │
+├─ Monitoreo ──────────────────────────────────────────────────────┤
+│  Prometheus · Grafana · DCGM · cAdvisor · Node Exporter          │
+└─ Seguridad & Compliance ─────────────────────────────────────────┤
+   Guardrails LLM auditables · Pseudonimización tokens             │
+   Human-in-the-Loop · Auditoría PostgreSQL con timestamps         │
+└──────────────────────────────────────────────────────────────────┘
+```
 
 
 ---
 
 
-## Lógica de Negocio en el Backend
+## 6. Contenedores Docker
 
+El sistema se despliega mediante un único `docker-compose.yml` administrado por un script `install.sh` de IaC. Todos los servicios son open source, sin costo de licencias.
 
----
-
-
-### 1. Bus de Eventos en Tiempo Real
-
-**Tecnología:** Redis Streams + Node.js Consumer Groups
-
-Cada área de la clínica publica eventos al stream. El backend Node.js actúa como consumidor orquestador:
-
-```
-PATIENT_ADMITTED      → inicia trayecto, asigna token pseudonimizado
-CHECKIN_QR            → paciente escaneó QR en módulo físico
-STUDY_STARTED         → técnico inició el estudio (tablet)
-SAMPLE_TAKEN          → muestra tomada en laboratorio
-STUDY_COMPLETE        → estudio finalizado en módulo
-RESULTS_READY         → resultados disponibles en portal
-SATURATION_DETECTED   → Isolation Forest detectó pico inusual
-ETA_RECALCULATED      → XGBoost recalculó tiempo estimado
-```
-
-
-### 2. Motor de Predicción de ETAs
-
-**Tecnología:** XGBoost / LightGBM · Python ML API (FastAPI) · Jupyter
-
-- Modelo entrenado con histórico de tiempos reales por tipo de estudio, turno y día
-- Re-inferencia cada 60 segundos vía llamada REST al endpoint `/predict/eta/:stationId`
-- Latencia de respuesta: < 100ms
-- Features principales: hora del día, día de la semana, carga actual del módulo, tipo de estudio, número de pacientes en cola
-
-**Flujo del modelo:**
-```
-Jupyter → entrena modelo → exporta model.pkl
-       → volumen compartido Docker
-       → Python ML API (FastAPI) → carga en startup
-       → responde /predict/eta en runtime
-```
-
-
-### 3. Orquestador de Trayecto
-
-**Tecnología:** N8N (flujos de negocio) + LangGraph API (flujos conversacionales)
-
-- **N8N** gestiona: notificaciones WhatsApp, escalado a personal humano, reasignación de técnicos, encuestas post-visita
-- **LangGraph** gestiona: estado de la conversación del chatbot, contexto multi-turno, transiciones Human-in-the-Loop
-
-
-### 4. Interfaz de Tracking — Visibilidad del Paciente
-
-**Tecnología:** React + WebSocket + WhatsApp
-
-- WebSocket pushea el estado del trayecto al frontend en tiempo real sin polling
-- WhatsApp envía notificaciones push sin necesidad de app instalada
-- El paciente ve su trayecto actualizado automáticamente en cualquier dispositivo
-
-
----
-
-
-## APIs del Sistema
-
-El sistema expone tres tipos de API según el caso de uso:
-
-
----
-
-
-### REST — Request/Response y CRUD
-
-Endpoints principales del Core:
-
-```
-POST  /auth/login                    Autenticación por folio+PIN o credenciales staff
-POST  /journey/checkin               Registro de llegada — genera token de trayecto
-GET   /journey/:token/status         Estado actual del trayecto del paciente
-POST  /journey/scan                  Check-in por QR en módulo físico
-PUT   /station/:id/state             Actualizar estado del módulo (tablet del técnico)
-POST  /station/:id/transition        Transición STUDY_STARTED / STUDY_COMPLETE
-GET   /predict/eta/:stationId        ETA predicho por XGBoost para un módulo
-POST  /chat/message                  Enviar mensaje al chatbot RAG
-POST  /journey/virtual-room          Activar sala de espera virtual
-GET   /clinic/:id/capacity           Snapshot de capacidad instalada vs demanda
-PUT   /staff/assign                  Reasignar técnico a módulo (sugerido por IA)
-```
-
-
-### WebSocket — Tiempo Real (push del servidor)
-
-```
-ws/patient/:token           JOURNEY_UPDATE · ETA_RECALCULATED · NEXT_STEP · ALERT
-ws/staff/:clinicId/:stId    PATIENT_INCOMING · QUEUE_UPDATE · REASSIGN_SUGGESTED
-ws/admin/:clinicId          SATURATION_ALERT · ANOMALY_DETECTED · STAFF_SUGGESTION
-ws/virtual-room/:clinicId   QUEUE_POSITION_UPDATE · CALL_TO_RETURN · TURN_IMMINENT
-```
-
-
-### GraphQL — Consultas Complejas (dashboard admin)
-
-```graphql
-query clinicStats($from: Date, $to: Date)      # Métricas históricas filtradas
-query patientJourney($token: String)            # Trayecto completo de un paciente
-query staffPerformance($period: String)         # Rendimiento del personal
-mutation resolveAlert($alertId: ID)             # Marcar alerta como atendida
-mutation updateStationCapacity($id: ID)         # Ajustar capacidad de módulo
-```
-
-
-> **Criterio de uso:** REST para acciones, WebSocket para tiempo real, GraphQL para reportes históricos complejos con múltiples filtros.
-
-
----
-
-
-## Perfiles de Usuario
-
-
----
-
-
-### 🧑‍⚕️ Paciente
-
-- Recibe folio y token de trayecto al llegar
-- Visualiza su posición en cola y ETA por WhatsApp o GUI Web
-- Activa sala de espera virtual para salir de la clínica sin perder su turno
-- Recibe notificaciones automáticas de cambios, alertas y siguiente paso
-- Interactúa con el chatbot RAG para resolver dudas operativas
-- Hace check-in por QR al llegar a cada módulo
-
-
-### 👩‍💼 Personal / Técnico
-
-- Actualiza el estado del módulo desde tablet (IDLE · BUSY · OVERLOADED)
-- Marca inicio y fin de cada estudio con un toque
-- Ve la cola de pacientes asignados con ETAs en tiempo real
-- Recibe sugerencias de reasignación del sistema
-- Puede intervenir en conversaciones del chatbot (Human-in-the-Loop)
-
-
-### 👨‍💼 Administrador
-
-- Dashboard global de capacidad instalada vs demanda en tiempo real
-- Recibe alertas de saturación detectadas por Isolation Forest
-- Acepta o rechaza sugerencias de redistribución de personal
-- Accede a reportes históricos vía GraphQL
-- Monitorea precisión del modelo ML y métricas de GPU / sistema
-
-
----
-
-
-## Tracking Físico del Paciente en Clínica
-
-El tracking físico dentro de la clínica se resuelve mediante dos mecanismos complementarios:
-
-
----
-
-
-### 1. Staff State Machine (mecanismo primario)
-
-El técnico de cada módulo actualiza el estado del paciente desde su tablet con un solo toque:
-
-```
-[Iniciar estudio]  →  evento STUDY_STARTED  →  Redis Streams  →  WebSocket  →  Paciente notificado
-[Completar]        →  evento STUDY_COMPLETE →  Redis Streams  →  N8N orquesta siguiente paso
-```
-
-Este es el patrón estándar de los sistemas HL7 en entornos clínicos reales. Es simple, confiable y auditable.
-
-
-### 2. QR Check-in por Módulo (mecanismo complementario)
-
-Cada área de la clínica tiene un código QR impreso. El paciente lo escanea al llegar al módulo:
-
-```
-Paciente llega a Ultrasonido → escanea QR
-→ POST /journey/scan {stationId, token}
-→ evento CHECKIN_QR en Redis Streams
-→ WhatsApp: "Llegaste a Ultrasonido. Tiempo estimado: 20 min. Te avisamos cuando sea tu turno."
-```
-
-**Ventajas:** cero hardware adicional, cero fricción para el paciente, trazabilidad completa de presencia física.
-
-
-### 3. RuView WiFi Sensing — Estimación Anónima de Volumen por Área (mecanismo de inteligencia operativa)
-
-Mientras los mecanismos 1 y 2 resuelven el trayecto individual del paciente, existe una brecha paralela en el lado operativo: el personal de clínica no tiene visibilidad en tiempo real de cuántas personas están acumuladas en cada área. RuView cubre exactamente esa capa mediante sensado pasivo de señal WiFi, sin cámaras, sin identificación y sin fricción alguna para el paciente.
-
-¿Qué es RuView y qué hace en este contexto?
-RuView es un sistema de percepción de IA en el edge que analiza las perturbaciones de la señal WiFi causadas por la presencia y movimiento humano — reconstruyendo conteo de personas, presencia y movimiento en tiempo real, completamente sin cámaras ni wearables. Para el caso de Salud Digna se usa exclusivamente para el conteo de ocupación por zona, alertas personalizadas indicativas, no clínicas. Los datos de RuView no entran al expediente clínico. Son datos operativos de flujo, no datos diagnósticos. Esa distinción los hace tratables bajo consentimiento LFPDPPP estándar, no bajo NOM-004 completa.
-
-
----
-
-
-## Aprovechamiento de Tiempos Muertos
-
-
----
-
-
-### Sala de Espera Virtual
-
-El paciente no necesita permanecer físicamente en la clínica durante su espera. Al activar la sala virtual:
-
-- El sistema guarda su posición en la cola
-- El paciente puede ir a la farmacia, comer, o quedarse en casa
-- Recibe notificación cuando su turno está próximo: *"Regresa en 10 minutos, eres el siguiente en Laboratorio"*
-- La clínica reduce la densidad de personas en sala de espera física
-
-
-### Contenido Proactivo Durante la Espera
-
-Mientras el paciente espera (físicamente o en sala virtual), el sistema puede enviarle por WhatsApp:
-
-- Recordatorio de preparación específica para su estudio (*"Recuerda: ayuno de 8 horas para tu biometría"*)
-- Video de 90 segundos explicando su próximo estudio
-- Encuesta de satisfacción preventiva
-- Consejos educativos de salud preventiva relevantes a su perfil
-
-
-### Mapa Interactivo del Trayecto
-
-La interfaz del paciente puede mostrar un mapa visual de su trayecto (estilo Uber) con:
-
-- Progreso actual en la secuencia de estudios
-- ETA actualizado por módulo
-- Instrucciones de preparación para el siguiente estudio
-- Alertas en tiempo real ante retrasos o cambios
-
-
----
-
-
-## Data Science & Modelos ML
-
-
----
-
-
-### Algoritmos Implementados
-
-| Algoritmo | Aplicación en el sistema |
+| Contenedor | Rol |
 |---|---|
-| **XGBoost / LightGBM** | Predicción de ETAs por módulo, tipo de estudio, turno y día |
-| **Isolation Forest** | Detección de anomalías — picos de demanda inusuales, tiempos outliers |
-| **K-Means Clustering** | Segmentación de pacientes por patrones de uso y horas pico |
-| **Simulación Monte Carlo** | Estimación de rangos de incertidumbre en ETAs (intervalos de confianza) |
+| `open-webui` | Interfaz conversacional para agentes de IA (Personal y Administrador) |
+| `nextjs` | Aplicación web principal — Paciente, Personal y Admin |
+| `node-express` | Backend central — API REST, WebSocket, Auth JWT, proxy a servicios |
+| `redis` | Base de datos de caché y bus de eventos (Redis Streams) |
+| `redisinsight` | GUI web de administración de Redis |
+| `redis-exporter` | Exportador de métricas Redis → Prometheus |
+| `postgresql` | Base de datos relacional (trayectos, registros clínicos, auditoría) |
+| `pgadmin` | GUI web de administración PostgreSQL |
+| `postgres-exporter` | Exportador de métricas PostgreSQL → Prometheus |
+| `qdrant-gpu` | Base de datos vectorial GPU (embeddings RAG) |
+| `ollama-gpu` | Servidor LLM local con GPU NVIDIA (Llama 3) |
+| `faster-whisper-gpu` | Motor Speech-to-Text en GPU (transcripción de voz) |
+| `n8n` | Orquestador de flujos operativos y automatizaciones WhatsApp |
+| `langchain` | Framework de cadenas LLM y conectores de datos |
+| `langgraph-api` | Servidor de agentes multistate con supervisión humana |
+| `apache-airflow` | Orquestación de pipelines ETL y reentrenamiento de modelos ML |
+| `jupyter-datascience` | Entorno Jupyter para análisis y experimentación de datos |
+| `python-ml-api` | FastAPI — Motor predictivo (XGBoost, Isolation Forest, Monte Carlo) |
+| `ruview` | Sistema experimental ESP32 WiFi CSI para estimación de ocupación por zona |
+| `prometheus` | Recolección y almacenamiento de métricas del sistema |
+| `nvidia-dcgm-exporter` | Exportador de métricas de GPU NVIDIA → Prometheus |
+| `node-exporter` | Exportador de métricas del sistema host → Prometheus |
+| `cadvisor` | Monitoreo de métricas por contenedor → Prometheus |
+| `grafana` | Dashboards de observabilidad, alertas y KPIs operativos |
 
-
-### Pipeline de Datos
-
-```
-Airflow (noche)
-  → ETL de trayectos históricos desde PostgreSQL
-  → Limpieza y feature engineering en Jupyter
-  → Entrenamiento XGBoost / LightGBM
-  → Exportar model.pkl a volumen compartido
-  → Python ML API carga nuevo modelo en memoria
-  → Backend consume /predict/eta con modelo actualizado
-```
-
-
-### Features del Modelo XGBoost (ETAs)
-
-```python
-features = [
-    'hour_of_day',          # hora del día (0-23)
-    'day_of_week',          # día de la semana (0-6)
-    'study_type',           # tipo de estudio (laboratorio, US, RX, MRI...)
-    'current_queue_length', # pacientes actualmente en cola del módulo
-    'staff_count',          # técnicos activos en el módulo
-    'station_load_pct',     # % de ocupación del módulo (últimos 30 min)
-    'historical_avg_time',  # tiempo promedio histórico del estudio
-    'day_type'              # normal / lunes / quincena / campaña
-]
-```
+**Total: ~24 contenedores** administrados por IaC reproducible en cualquier entorno.
 
 
 ---
 
 
-## IA Conversacional — El Asistente
+## 7. Lógica de Negocio — Backend
+
+
+### 7.1 Bus de Eventos — Redis Streams
+
+El corazón del sistema es el bus de eventos pub/sub implementado sobre Redis Streams. Cada área clínica publica eventos que el backend consume y orquesta.
+
+```
+EVENTOS PRINCIPALES
+
+  PATIENT_ADMITTED      →  Admisión registra al paciente con token pseudonimizado
+  STUDY_STARTED         →  Personal inicia el estudio (Lab / Imagenología)
+  SAMPLE_TAKEN          →  Toma de muestra completada
+  STUDY_COMPLETE        →  Estudio procesado y listo
+  RESULTS_READY         →  Resultados disponibles para entrega
+  QUEUE_REORGANIZED     →  El orquestador reordena la fila por saturación
+  ANOMALY_DETECTED      →  Isolation Forest detecta un patrón anómalo
+  SATURATION_ALERT      →  Área supera umbral de capacidad configurado
+  MODEL_REINFERENCE     →  XGBoost actualiza ETAs para todos los pacientes activos
+  NPS_TRIGGERED         →  N8N dispara encuesta post-visita al paciente
+```
+
+El backend Node.js es el consumidor central: recibe eventos desde Redis, actualiza el estado del trayecto en PostgreSQL, recalcula ETAs vía la Python ML API, y emite cambios de estado por WebSocket hacia las GUI en tiempo real.
+
+
+### 7.2 Motor de Predicción de ETAs — XGBoost
+
+
+```
+PIPELINE DE PREDICCIÓN
+
+  Entrada:
+  ├── Tipo de estudio (Lab / Rayos / Eco / TAC / ...)
+  ├── Hora del día y día de semana
+  ├── Carga actual del área (pacientes en fila)
+  ├── Tiempo promedio histórico por estudio y área
+  ├── Personal disponible en turno
+  └── Resultado de K-Means (segmento de demanda del momento)
+
+  Proceso:
+  ├── XGBoost → ETA puntual (p50)
+  ├── Monte Carlo → Intervalo de confianza (p10–p90)
+  └── Re-inferencia automática cada 60 segundos
+
+  Salida:
+  ├── ETA en minutos con intervalo de confianza
+  ├── Latencia de inferencia < 100 ms
+  └── Actualización vía WebSocket a todos los clientes activos
+```
+
+
+### 7.3 Detección de Anomalías — Isolation Forest
+
+Isolation Forest opera en paralelo sobre el stream de métricas operativas. Detecta patrones fuera de lo ordinario (picos de demanda, demoras inusuales, personal insuficiente) y publica eventos `ANOMALY_DETECTED` al bus Redis que N8N procesa para disparar alertas al personal y al dashboard del administrador.
+
+
+### 7.4 Orquestador Conversacional — N8N + LangGraph
+
+N8N maneja flujos operativos de negocio: notificaciones WhatsApp/Telegram, escalación al personal, encuestas NPS post-visita y reasignación de pacientes. LangGraph maneja flujos conversacionales del agente de IA con gestión de estados y supervisión humana activa (Human-in-the-Loop). Ambos se comunican con el backend Node.js vía REST API interna.
+
+
+### 7.5 Pipelines de ML — Apache Airflow
+
+Airflow orquesta tres categorías de pipelines nocturnos:
+
+- **ETL de datos clínicos:** Extracción y limpieza de registros de trayectos completados desde PostgreSQL.
+- **Reentrenamiento de modelos:** XGBoost, Isolation Forest y K-Means se reentrenan con los datos del día anterior. Los datos provienen exclusivamente del personal clínico (control total del inicio y fin de cada fase), garantizando ausencia de ruido.
+- **Generación de embeddings:** Procesamiento de documentos de la base de conocimiento oficial de Salud Digna hacia Qdrant para el pipeline RAG.
 
 
 ---
 
 
-### Arquitectura RAG
-
-```
-Pregunta del paciente (WhatsApp / Telegram / Web)
-  → Faster-Whisper (si es nota de voz) → texto
-  → LangGraph: gestión de contexto multi-turno
-  → Qdrant: búsqueda semántica en knowledge base
-    (FAQs · protocolos · instrucciones de estudio · información de clínica)
-  → Ollama (LLM local): generación de respuesta con contexto recuperado
-  → Guardrails: validación de que la respuesta no es clínica ni dañina
-  → Respuesta al paciente
-```
+## 8. Lógica de Negocio — Frontend
 
 
-### Guardrails y Seguridad
+### Para el Paciente
 
-- **Cero diagnósticos médicos**: el chatbot responde solo preguntas operativas y de logística
-- **Detección de escalado**: si detecta malestar del paciente o consulta médica compleja → Human-in-the-Loop
-- **Transferencia silenciosa**: el personal recibe el contexto completo de la conversación al intervenir
-- **Auditabilidad total**: cada conversación queda registrada con timestamps en PostgreSQL
-- **Pseudonimización**: el chatbot trabaja con el token de trayecto, no con nombre ni expediente
-- **Self-hosted y Pseudonimización por Token de Trayecto** Compatibles con los estándares JCI, CAP e ISO 15189 que Salud Digna ya certifica
+CareFlow 360° opera como una **sala de espera virtual inteligente** que permite al paciente:
+
+- Consultar su turno en tiempo real con su posición exacta en la fila.
+- Conocer el ETA con intervalo de confianza (ej. "~21 min · rango 15–30 min").
+- Saber cuál es el siguiente estudio en su secuencia de atención.
+- Recibir notificaciones proactivas ante cambios o llamados a su módulo.
+- Activar la **sala de espera virtual** para salir de la clínica sin perder su lugar.
+- Interactuar con el agente de IA para resolver dudas, siempre bajo demanda explícita.
+
+Todo vía WhatsApp o la GUI web. Sin descarga de aplicaciones. Sin curva de aprendizaje.
 
 
-### Tipos de Consultas Cubiertas
+### Para el Personal Clínico
 
-| Tipo | Ejemplos |
+El personal dispone de una vista centralizada de **Gestión Inteligente de Flujo** con cuatro métricas operativas en tiempo real:
+
+- Pacientes en fila (conteo actual por área y sucursal).
+- Saturación del área (porcentaje de capacidad operativa activa).
+- ETA predicho promedio (calculado por el modelo XGBoost).
+- Módulos activos (estado de disponibilidad por área).
+
+Las acciones disponibles son: ingresar pacientes a la fila, administrar turnos, forzar recálculo de ETA, pausar pacientes atípicos, llamar turno manual, reasignar pacientes, ver agenda completa y disparar alerta N8N de emergencia. El Asistente Operativo IA está disponible en la misma vista para consultas en lenguaje natural.
+
+
+### Para el Administrador
+
+El Control Tower del administrador expone:
+
+- **Dashboard de KPIs:** Throughput por área, saturación global, tendencia de ETA (p50 y p90), eventos recientes del bus Redis.
+- **Panel de Modelos ML:** Estado de XGBoost, Isolation Forest y K-Means con versiones, última inferencia, ciclo de re-inferencia, drift score y disparador de reentrenamiento manual.
+- **Panel de Auditoría:** Log completo de interacciones del agente de IA con timestamps, perfil de usuario y metadatos de supervisión.
+- **Agente IA Dr360:** Interfaz conversacional multiagente conectada en tiempo real a Redis Streams y PostgreSQL para consultas operativas estratégicas.
+
+
+---
+
+
+## 9. Perfiles de Usuario e Interfaces
+
+
+### Paciente
+
+| Interfaz | Descripción |
 |---|---|
-| Logística | *"¿Dónde está el baño?"*, *"¿Cuánto tarda mi resultado?"* |
-| Preparación | *"¿Necesito ayuno para mi ultrasonido?"*, *"¿Puedo tomar mis medicamentos?"* |
-| Estado del trayecto | *"¿Cuánto falta para mi turno?"*, *"¿Qué sigue después del laboratorio?"* |
-| Sala virtual | *"Quiero salir un momento, ¿pierdo mi lugar?"* |
-| Servicios | *"¿Aceptan tarjeta?"*, *"¿A qué hora cierran?"* |
+| Formulario de ingreso a fila virtual | Registro sin app: nombre completo + folio de cita. Genera token pseudonimizado. |
+| Vista de turno y ETA | Posición en fila, tiempo estimado con intervalo de confianza, seguimiento de fases del trayecto. |
+| Sala de espera virtual | Permite salir de la clínica temporalmente. Recibe aviso proactivo de llamado al módulo. |
+| Agente de IA (WhatsApp / OpenWebUI) | Asistente conversacional RAG con LLM local. Resuelve dudas clínicas y operativas bajo demanda. |
 
 
----
+### Personal Clínico
 
-
-## Observabilidad y Monitoreo
-
-El stack de observabilidad cubre tres capas de forma completa:
-
-
----
-
-
-### Métricas del Sistema (Prometheus + Grafana)
-
-| Exporter | Qué monitorea |
+| Interfaz | Descripción |
 |---|---|
-| `node-exporter` | CPU, RAM, disco, red del host |
-| `cadvisor` | Métricas de cada contenedor Docker |
-| `redis-exporter` | Comandos/s, memoria, longitud de Streams |
-| `postgres-exporter` | Queries lentas, conexiones activas, tamaño de tablas |
-| `dcgm-exporter` | GPU: utilización, temperatura, VRAM usada/libre |
+| Dashboard de KPIs | Indicadores de saturación, ETA promedio, pacientes en fila y módulos activos. |
+| Formulario de ingreso a fila | Alta de paciente en la fila de la sucursal y área asignada por el personal. |
+| Administración de la fila | Control total sobre el orden, prioridad y estado de cada paciente en su área. |
+| Asistente Operativo IA (OpenWebUI) | Agente de IA para consultas operativas en lenguaje natural con contexto en tiempo real. |
 
 
-### Herramientas de Inspección
+### Administrador
 
-- **RedisInsight**: visualización en vivo de Redis Streams y estados de pacientes
-- **pgAdmin 4**: consultas SQL directas sobre históricos y trayectos
-- **Open WebUI**: gestión y prueba de modelos LLM locales
-- **Airflow UI**: monitoreo de pipelines batch y reentrenamiento ML
-- **N8N UI**: visualización y depuración de flujos de orquestación
-
-
-### Alertas Operativas
-
-- Saturación de módulo detectada por Isolation Forest → alerta en dashboard admin + WhatsApp al coordinador
-- GPU VRAM > 90% → alerta Grafana
-- Redis Stream lag > umbral → alerta de procesamiento de eventos
-- ETA deviation > 20% del predicho → trigger de recalibración del modelo
-
-
-## Aporte de Valor al Sistema Mediante IA y ML
-
-
-- ETA dinámico,
-- saturación/anomalías,
-- recomendación operativa.
+| Interfaz | Descripción |
+|---|---|
+| Dashboard KPIs estratégico | Throughput, saturación global, tendencia ETA, log de eventos del bus. |
+| Panel de auditoría de mensajes | Supervisión y trazabilidad completa de las interacciones con el agente IA. |
+| Panel de ajuste de modelos ML | Estado, drift score, última inferencia y reentrenamiento de XGBoost, Isolation Forest y K-Means. |
+| Agente IA Dr360 (OpenWebUI / WhatsApp) | Interfaz conversacional MultiAgent RAG conectada al estado operativo en tiempo real. |
 
 
 ---
 
 
-## KPIs y Métricas de Éxito
+## 10. Agentes de Inteligencia Artificial
 
-| KPI | Definición | Meta inicial |
+El sistema implementa cuatro agentes especializados bajo una arquitectura MultiAgent con LangGraph, todos ejecutando un LLM local sobre GPU NVIDIA (Ollama + Llama 3) sin dependencia de APIs externas para datos clínicos.
+
+
+### Paciente Bot — Agente de Acompañamiento al Paciente
+
+Asiste al paciente durante su visita. Responde dudas sobre preparaciones de estudio, tiempos estimados, instrucciones de seguimiento y contenido educativo preventivo. Opera vía WhatsApp y la GUI web. Cada respuesta está construida sobre el corpus oficial de Salud Digna indexado en Qdrant. Transfiere al personal ante casos fuera de su alcance.
+
+
+### Fila Virtual Bot — Agente de Estado del Trayecto
+
+Agente de servicio que notifica proactivamente cambios de estado del trayecto: llamados a módulo, retrasos, reordenamientos de fila y recordatorios de preparación pre-estudio. Se activa por eventos del bus Redis Streams orquestados por N8N.
+
+
+### Personal Bot — Copiloto Operativo del Staff
+
+Asiste al personal clínico con análisis operativos en tiempo real: reporte de saturación por área, pacientes en riesgo de demora, sugerencias de reasignación y resumen del estado de los modelos ML. Accesible vía OpenWebUI con acceso a Redis Streams y PostgreSQL en tiempo real.
+
+
+### Administrador Bot (Dr360) — Agente Estratégico
+
+Agente de inteligencia operativa para administradores. Responde preguntas estratégicas sobre el sistema: comparativa de ETAs por sucursal, detección de anomalías recientes, estado global de modelos, rendimiento histórico y métricas de adopción. Arquitectura MultiAgent RAG · LangGraph v0.3 con Human-in-the-Loop activo.
+
+
+### Características Comunes de Todos los Agentes
+
+- LLM local en GPU (Ollama + Llama 3) — cero datos clínicos fuera del perímetro.
+- RAG vectorial sobre Qdrant GPU con embeddings del corpus oficial de Salud Digna.
+- Guardrails configurables y auditables.
+- Transcripción de voz en tiempo real con Faster-Whisper.
+- Supervisión humana activa (HITL) en todos los flujos conversacionales.
+- Auditoría completa de mensajes con timestamps en PostgreSQL.
+- Cumplimiento LFPDPPP, NOM-024-SSA3, Principios Chapultepec (SECIHTI 2026).
+
+
+---
+
+
+## 11. Algoritmos de Data Science
+
+
+### XGBoost / LightGBM — Estimación de ETAs
+
+Modelo de gradient boosting entrenado con el historial de tiempos por tipo de estudio, turno, hora, día de semana, carga del área y personal disponible. Produce la estimación de tiempo de espera puntual (p50). Re-inferencia cada 60 segundos con latencia de respuesta inferior a 100 ms vía FastAPI.
+
+
+### Monte Carlo — Intervalos de Confianza
+
+Simulación estocástica que genera los percentiles p10, p50 y p90 sobre el ETA base de XGBoost. Permite comunicar rangos de incertidumbre al paciente (ej. "entre 15 y 30 minutos") en lugar de un único valor puntual, incrementando la credibilidad percibida y reduciendo la frustración ante variaciones.
+
+
+### Isolation Forest — Detección de Anomalías
+
+Algoritmo de detección de outliers que opera en tiempo real sobre el stream de métricas operativas (tiempos de atención, carga por área, eventos del bus Redis). Identifica patrones fuera del comportamiento esperado y publica eventos `ANOMALY_DETECTED` que disparan alertas en el dashboard del administrador y el agente de IA del personal.
+
+
+### K-Means Clustering — Segmentación de Demanda
+
+Segmenta los patrones históricos de demanda por sucursal, horario y día de semana. Los segmentos resultantes se usan como features contextuales del modelo XGBoost, mejorando la precisión de las predicciones en escenarios de alta variabilidad operativa.
+
+
+---
+
+
+## 12. Bus de Eventos y Flujo de Datos
+
+
+```
+FLUJO DE EVENTOS EN TIEMPO REAL
+
+  [Personal Clínico]
+         │ publica evento
+         ▼
+  [Redis Streams — Event Bus]
+         │
+         ├──► [Node.js Backend]
+         │         │
+         │         ├──► Actualiza estado en PostgreSQL
+         │         ├──► Dispara re-inferencia XGBoost (FastAPI)
+         │         └──► Emite por WebSocket → GUI Paciente / Personal / Admin
+         │
+         ├──► [N8N Orquestador]
+         │         │
+         │         ├──► Notificación WhatsApp/Telegram al paciente
+         │         ├──► Alerta al personal si anomalía detectada
+         │         └──► Encuesta NPS post-visita al completar trayecto
+         │
+         └──► [LangGraph — Agentes IA]
+                   │
+                   ├──► Contexto actualizado para respuestas del agente
+                   └──► Escalación HITL al personal si necesario
+```
+
+
+---
+
+
+## 13. Flujo del Trayecto del Paciente
+
+```
+TRAYECTO COMPLETO CON CAREFLOW 360°
+
+  FASE 1 — ADMISIÓN
+  ══════════════════════════════════════════════════════════════════
+  El personal registra al paciente en el sistema.
+  Redis Streams recibe: PATIENT_ADMITTED
+  El paciente recibe su token pseudonimizado por WhatsApp o QR.
+  XGBoost calcula el ETA inicial. La GUI muestra turno y fila.
+
+  FASE 2 — SALA DE ESPERA VIRTUAL
+  ══════════════════════════════════════════════════════════════════
+  El paciente activa la sala de espera virtual.
+  Puede salir de la clínica sin perder su lugar.
+  Recibe aviso proactivo cuando debe acercarse al módulo.
+  El agente de IA está disponible bajo demanda para dudas.
+
+  FASE 3 — ESTUDIO Y PROCESAMIENTO
+  ══════════════════════════════════════════════════════════════════
+  El personal publica: STUDY_STARTED → SAMPLE_TAKEN → STUDY_COMPLETE
+  XGBoost actualiza ETA cada 60s con la nueva carga del área.
+  Isolation Forest monitorea anomalías de forma continua.
+  La GUI del paciente refleja el avance de su trayecto en tiempo real.
+
+  FASE 4 — ENTREGA Y CICLO DE MEJORA CONTINUA
+  ══════════════════════════════════════════════════════════════════
+  El personal publica: RESULTS_READY
+  El paciente recibe confirmación y tiempo estimado de resultados digitales.
+  N8N dispara la encuesta NPS post-visita automáticamente.
+  Apache Airflow ingesta los datos del trayecto completado.
+  XGBoost e Isolation Forest se reentrenan con datos limpios y verificados.
+  El sistema aprende de cada visita y mejora sus predicciones.
+```
+
+
+---
+
+
+## 14. Cumplimiento Legal y Regulatorio
+
+CareFlow 360° está diseñado con cumplimiento normativo desde la arquitectura, no como capa posterior.
+
+| Marco Regulatorio | Aplicación en el Sistema |
+|---|---|
+| **LFPDPPP** | Pseudonimización de tokens del paciente. LLM local sin APIs externas. Auditoría completa de datos. |
+| **Ley General de Salud** (Art. 71 Bis/Ter/Quáter — Enero 2026) | Marco de referencia para el manejo de datos de salud en el sistema. |
+| **NOM-004-SSA3** | Expediente clínico — el sistema no almacena resultados de estudios, solo estado del trayecto. |
+| **NOM-024-SSA3** | Sistemas de información en salud — interoperabilidad y seguridad de registros. |
+| **NOM-035-SSA3** | Referencia para flujos de información clínica operativa. |
+| **Principios Chapultepec — SECIHTI** (Enero 2026) | Marco de gobernanza de IA aplicado al diseño de agentes y guardrails del sistema. |
+| **White House National AI Policy Framework** (Marzo 2026) | Marco internacional de referencia para el diseño ético y seguro de sistemas de IA en salud. |
+| **JCI · CAP · ISO 15189** | Certificaciones vigentes de Salud Digna consideradas como contexto de calidad y trazabilidad. |
+
+
+### Mecanismos de Seguridad Implementados
+
+- Token pseudonimizado por visita: el paciente nunca expone datos clínicos en las interfaces públicas.
+- LLM local en GPU sin APIs externas: los datos clínicos no salen del perímetro.
+- Guardrails configurables en todos los agentes de IA.
+- Human-in-the-Loop activo en cada flujo conversacional.
+- Auditoría completa en PostgreSQL con timestamps inmutables por evento.
+- Agente experimental de prediagnóstico (AgentBot Doctor) con caveat explícito: clasificación COFEPRIS pendiente de evaluación, fuera del scope del MVP.
+
+
+---
+
+
+## 15. KPIs e Impacto Proyectado
+
+Con más de 240 clínicas en red, 32 estados y presencia en 4 países, cualquier mejora porcentual en estos indicadores representa millones de interacciones anuales transformadas.
+
+| KPI | Objetivo | Referencia |
 |---|---|---|
-| **ETA Accuracy** | Diferencia entre ETA predicho y tiempo real de atención | ≤ 15% de desviación |
-| **Wait Time Reduction** | Reducción en tiempo de espera percibido (encuesta) | > 30% mejora vs baseline |
-| **WhatsApp Adoption** | % de pacientes que usan el canal de notificaciones | > 60% en primer mes |
-| **Virtual Room Usage** | % de pacientes que activan sala de espera virtual | > 40% en primer mes |
-| **Chatbot Escalation Rate** | % de conversaciones que escalan a humano | < 15% (meta: chatbot resuelve la mayoría) |
-| **NPS Post-Visita** | Net Promoter Score capturado por encuesta automática | > +40 puntos |
-| **Operator Response Time** | Tiempo entre alerta del sistema y acción del operador | < 3 minutos |
-| **Model Drift** | Degradación del MAE de XGBoost semana sobre semana | Trigger de reentrenamiento si MAE > 20% |
+| Reducción de espera percibida | −30% | Meta del primer trimestre en clínica piloto |
+| Adopción sin instalar app | >60% | Vía WhatsApp y GUI web en el primer mes |
+| Tasa de escalación al personal | <15% | El agente RAG resuelve el 85%+ de forma autónoma |
+| Net Promoter Score | +40 NPS | Capturado por encuesta automática N8N post-visita |
+| Latencia de re-inferencia XGBoost | <100 ms | Por cada ciclo de 60 segundos |
+| Satisfacción del paciente | +30% | Proyección basada en reducción de incertidumbre |
 
 
 ---
 
 
-## Estimaciones de Impacto
+## 16. Infraestructura como Código
 
-- Proyección concreta: “>30 % reducción espera en +240 clínicas → millones de pacientes beneficiados”.
-
-
----
-
-
-## Seguridad y Soberanía de Datos
-
-
----
-
-
-### Soberanía de Datos
-
-- **100% self-hosted**: todos los datos clínicos permanecen en la infraestructura de Salud Digna
-- **Sin APIs de pago para funcionalidades críticas**: el LLM corre localmente en GPU propia
-- **Costo de infraestructura = hardware**: sin licencias, sin costos por volumen de datos
-- **Escalabilidad lineal**: replicar el docker-compose con `.env` parametrizado por sucursal
-
-
-### Mecanismos de Seguridad
-
-| Mecanismo | Implementación |
-|---|---|
-| **Pseudonimización** | El chatbot y el bus de eventos trabajan con token de trayecto, no con datos personales directos |
-| **Autenticación** | JWT + refresh tokens en cookies httpOnly — roles diferenciados por perfil |
-| **Guardrails IA** | Validación de outputs del LLM antes de enviar al paciente |
-| **Sandboxes** | Contenedores aislados con redes internas/externas separadas |
-| **Auditoría** | Registro completo de transiciones de estado, acciones del operador y conversaciones |
-| **Firewall de red** | Red Docker interna para tráfico privado — solo el backend y Traefik exponen puertos |
-| **LFPDPPP** | Diseño compatible con la Ley Federal de Protección de Datos Personales en Posesión de Particulares |
-
-
----
-
-
-## Infraestructura y Despliegue
-
-
----
-
-
-### Requisitos del Sistema
-
-**Hardware mínimo para PoC:**
-
-```
-CPU:     8 cores (recomendado 16+)
-RAM:     32 GB (recomendado 64 GB)
-GPU:     NVIDIA con 8 GB VRAM mínimo (RTX 3080 / A4000+)
-Disco:   500 GB SSD (para modelos LLM + datos)
-OS:      Ubuntu 24.04 LTS
-```
-
-
-**Software base:**
-
-```
-Docker Engine 26+
-Docker Compose v2
-NVIDIA Container Toolkit
-CUDA Drivers 12.x
-```
-
-
-### Redes Docker
-
-```yaml
-networks:
-  internal:     # tráfico privado entre servicios (BD, Redis, ML API)
-  external:     # servicios expuestos al exterior (backend, Grafana, N8N)
-```
-
-
-### Estructura del Proyecto (IaC)
-
-```
-ruta-digna-360/
-├── docker-compose.yml      # Orquestación de todos los servicios
-├── prometheus.yml          # Configuración de scraping de métricas
-├── .env                    # Variables de entorno parametrizadas por sucursal
-├── install.sh              # Script CLI de instalación y gestión del proyecto
-│
-├── backend/                # Node.js + Next.js — API y WebSocket
-│   ├── Dockerfile
-│   ├── src/
-│   │   ├── routes/         # REST endpoints
-│   │   ├── ws/             # WebSocket handlers
-│   │   ├── graphql/        # Schema y resolvers GraphQL
-│   │   ├── streams/        # Redis Streams consumers
-│   │   └── services/       # Lógica de negocio
-│   └── package.json
-│
-├── ml_api/                 # Python ML API — FastAPI + XGBoost
-│   ├── Dockerfile          # FROM langchain/langchain
-│   ├── main.py             # FastAPI app + /predict/eta endpoint
-│   ├── models/             # Volumen compartido con Jupyter
-│   └── requirements.txt
-│
-├── notebooks/              # Jupyter notebooks de entrenamiento
-│   ├── xgboost_eta.ipynb
-│   ├── isolation_forest.ipynb
-│   ├── kmeans_clustering.ipynb
-│   └── monte_carlo.ipynb
-│
-├── airflow/
-│   └── dags/               # Pipelines batch: ETL, reentrenamiento, reportes
-│
-├── n8n/
-│   └── workflows/          # Flujos exportados: notificaciones, escalado
-│
-├── frontend/               # React + TypeScript
-│   ├── src/
-│   │   ├── views/
-│   │   │   ├── patient/    # Interfaz paciente
-│   │   │   ├── staff/      # Interfaz personal clínico
-│   │   │   └── admin/      # Dashboard administrador
-│   │   └── components/
-│   └── package.json
-│
-└── datasets/               # Datos sintéticos de entrenamiento
-    └── synthetic_clinic_data.csv
-```
-
-
-### Comandos de Gestión (CLI)
+El sistema completo se levanta con un único comando mediante el script `install.sh`:
 
 ```bash
-# Instalación completa
-./install.sh install
+# Clonar el repositorio
+git clone https://github.com/neuralytics/careflow-360.git
+cd careflow-360
 
-# Levantar stack completo
-./install.sh up
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con parámetros de la sucursal
 
-# Levantar solo el core (10 servicios mínimos)
-./install.sh up --core
+# Levantar el stack completo
+bash install.sh
 
-# Ver estado de todos los servicios
-./install.sh status
+# O directamente con Docker Compose
+docker compose up -d
+```
 
-# Ver logs de un servicio
-./install.sh logs backend
+El `docker-compose.yml` está parametrizado por sucursal, lo que permite despliegue reproducible en cualquier servidor con Ubuntu 24.04 y Docker, en entornos on-premise, cloud o híbridos, sin configuración manual adicional.
 
-# Detener el stack
-./install.sh down
+### Estructura del Repositorio
 
-# Actualizar modelos ML
-./install.sh ml-retrain
+```
+careflow-360/
+├── docker-compose.yml          # Stack completo (~24 servicios)
+├── install.sh                  # Script IaC de despliegue
+├── .env.example                # Variables de entorno por sucursal
+├── prometheus.yml              # Configuración de scraping de métricas
+│
+├── frontend/                   # Next.js + React + Shadcn/ui
+│   ├── app/paciente/           # GUI Paciente (fila virtual, turno, ETA)
+│   ├── app/personal/           # GUI Personal (dashboard, fila, IA)
+│   └── app/admin/              # GUI Administrador (KPIs, ML, auditoría)
+│
+├── backend/                    # Node.js + Express.js
+│   ├── api/                    # REST API endpoints
+│   ├── websocket/              # Servidor WebSocket en tiempo real
+│   └── redis/                  # Consumidores de Redis Streams
+│
+├── ml-api/                     # Python FastAPI
+│   ├── xgboost/                # Motor de predicción ETA
+│   ├── isolation_forest/       # Detección de anomalías
+│   └── monte_carlo/            # Intervalos de confianza
+│
+├── airflow/                    # Apache Airflow DAGs
+│   ├── etl/                    # Pipelines de extracción y limpieza
+│   └── retraining/             # Reentrenamiento automático de modelos
+│
+├── agents/                     # LangGraph + LangChain
+│   ├── paciente_bot/           # Agente de acompañamiento al paciente
+│   ├── fila_bot/               # Agente de estado del trayecto
+│   ├── personal_bot/           # Copiloto operativo del staff
+│   └── admin_bot/              # Agente estratégico Dr360
+│
+├── n8n/                        # Flujos N8N exportados
+│   ├── whatsapp_notif.json     # Notificaciones WhatsApp/Telegram
+│   ├── nps_survey.json         # Encuesta post-visita
+│   └── emergency_alert.json    # Alertas de emergencia al staff
+│
+└── notebooks/                  # Jupyter — Análisis y experimentación
+    ├── eda_tiempos.ipynb        # Análisis exploratorio de tiempos
+    └── model_validation.ipynb  # Validación de modelos ML
 ```
 
 
 ---
 
 
-## Demo a Presentar Simplificando el Concepto y Funcionamiento
+## 17. Filosofía del Proyecto
 
-- Proyecto corriendo en local en el entorno de desarollo
+La filosofía de CareFlow 360° se sustenta en cuatro pilares que se sostienen mutuamente:
 
-- Interfaz paciente: WhatsApp + WebSocket + sala virtual + ETA recalculado por XGBoost.
+**Pilar I — Soberanía:** Soberanía de datos, cumplimiento legal y ético, y seguridad de la información. Toda la gestión de datos clínicos respeta la privacidad, las normativas vigentes y los estándares de protección nacionales e internacionales. LLM local, sin APIs externas, sin licencias de terceros.
 
-- Interfaz staff: Alerta Isolation Forest + sugerencia de reasignación.
+**Pilar II — Ingeniería:** Enfoque DevOps y MLOps apoyado en arquitecturas de microservicios, Infraestructura como Código y tecnologías Open Source. Despliegues reproducibles, escalabilidad horizontal y mantenimiento eficiente. SCRUM con sprints de 48 horas durante el hackathon.
 
-- Interfaz admin: Dashboard capacidad + métricas Prometheus en vivo.
+**Pilar III — Inteligencia:** Arquitecturas orientadas a eventos combinadas con IA y analítica predictiva. Orquestación dinámica del sistema y toma de decisiones en tiempo real. Detección de anomalías proactiva. RAG auditable. Multi-agent con supervisión humana.
 
-- Backup: video 4K del stack completo por si falla algo.
-
-
----
-
-
-## Referencias
-
-https://codepen.io/editor/Daniel-Humberto/pen/019d1947-ae21-7feb-a13b-161c98c501e8
+**Pilar IV — Interfaces:** Interfaces gráficas intuitivas y accesibles para todo tipo de usuarios, desde pacientes hasta personal operativo. Sin curva de aprendizaje. Sin instalación de apps. Acciones de un solo toque para el staff. Contenido educativo entregado bajo demanda.
 
 
 ---
 
 
-# Stack Tecnologico
+## 18. Equipo Neuralytics
+
+Equipo multidisciplinario de Ingenieros en Software con especialidades complementarias, formado para abordar de manera integral el desafío del track: desde interfaces gráficas intuitivas y accesibles hasta modelos predictivos robustos y despliegue reproducible mediante microservicios e infraestructura como código.
 
 
 ---
 
 
-## Objetivos del Stack Tecnologico
-
-
-Durante el  Hackathon solo se plantea llevar acabo el entrenamiento de modelos de ML, y terminar la configuracion del sistema y Pipelines sobre el Stack Tecnologico Propuesto a Continuacion.
-
-Previamente al Hackathon ya se contara con el proyecto base (Docker-compose.yml+Prometeus.yml+.Env+Script .sh para gestionar el proyecto tipo IaC + Interfaces Web de Pacientes, Empleados, Administradores).
-
-El proyecto base va a ser reproducible y gestionable mediante IaC. El proyecto base consta de los siguientes 5 manifiestos:
-
-- Script/Herramienta CLI de instalacion .sh 
-- Docker-compose
-- Prometheus.yml
-- .env  
-
-Y Las Interfaces, Codigos ETL base, Algoritmos ML, y directorios prefedinidos, diseñados, y Configurados.
-
-
----
-
-
-## Viabilidad del Stack Tecnologico
-
-El Stack Tecnologico consta de multiples contenedores para la prueba de concepto y MVP, pero es funcional con tan solo 10 contenedores. El sistema pueda escalar horizontal y verticalmente.
-
-El sistemas tambien se podria desplegar bajo una arquitectura Monolitica.
-
-
----
-
-
-## Viabilidad del Stack Tecnologico
-
-Conciderando que puede llegar a haber una gran cantidad de visitas diarias, se requiere el equilibrio de carga en el extremo frontal de la interfaz por lo que se dispone a usar Node.Js + Express.Js 
-
-Con el fin de reducir el consumo de recursos de la formación en rotación, se utiliza websocket y GraphQL para mantener una larga conexión entre usuarios para que ambas partes puedan obtener la información de ubicación de cada una en tiempo real.
-
-
----
-
-
-## Enfoque de Desarrollo sobre el Stack Tecnologico
-
-- MVP
-- PoC
-
-
----
-
-
-## Capacidades del Sistema / Reglas de Negocio del Stack Tecnologico
-
-- Soberania de Datos
-- Data Analysis 
-- Data Science
-- Optimitation
-- Automation
-
-
----
-
-
-## Tipo de Gestión e Infraestructura del Stack Tecnologico
-
-- Human in de Loop
-- Microservices
-- Self-Hosted
-- On Premise
-- IaC
-
-
----
-
-
-## 🏗️ Arquitecturas del Proyecto
-
-### - Arquitectura de Host: Self-Hosted
-### - Arquitectura de Software: MicroServicios
-### - Arquitectura de Monitorizacion: Pull-Based y Pushgateway.
-### - Arquitectura de Accion de los Agentes de IA: Human in the Loop
-### - Arquitectura de Redes: Red Interna para tráfico privado y Red Externa para servicios públicos
-### - Arquitectura de Bases de Datos: SQL para registros, NoSQL en caché para mensajes rápido, Vectorial para RAG, y Graph para Agents AI
-
-
----
-
-
-## Caracteristicas de Segurirdad en el Stack Tecnologico
-
-- Data Anonymization
-- Guardrails 
-- Sandboxes
-- Firewall
-- Auditoring
-
-
----
-
-
-## Caracteristicas Base del Hardware, Software y Drivers para el Stack Tecnologico
-
-- Linux (Ubuntu 24.04)
-- Docker
-
-
----
-
-
-## Caracteristicas del Hardware, Software y Drivers, Necesarias para Inferencia de GenAI Localmente
-
-- GPU Nvidia + Workstation
-- Drivers Cuda
-
-
----
-
-
-## 📋Tipos de Despliegue con Docker
-
-- Docker-Compose sin el uso de Kubernetes u orquestadores complejos. Si se llegan a agregar orquesatadores para produccion pueden lograr que el sistema se reinicie automáticamente cuando el sistema se cae.
-
-
----
-
-
-## 📦 Contenedores
-
-- **Open WebUI**
-
-- **Server BackEnd & FrontEnd Node.js + Next.js**
-
-- **Data Base Redis**
-- **RedisInsight**
-- **Redis Exporter**
-- **Data Base PostgreSQL**
-- **pgAdmin 4 Web UI**
-- **Postgres Exporter**
-- **Qdrant GPU NVIDIA**
-
-- **Ollama GPU NVIDIA**
-- **Faster-Whisper GPU NVIDIA**
-
-- **N8N Web UI**
-- **langchain**
-- **langgraph-api**
-- **Apache AirFlow**
-- **jupyter/datascience-notebook**
-- **Python ML API (FastAPI)**
-- **RuView**
-
-- **Prometheus**
-- **NVIDIA DCGM Exporter**
-- **Node Exporter**
-- **Cadvisor**
-- **Grafana**
-
-
----
-
-
-## 📦 Frameworks y lenguajes a Utilizar
-
-- FrontEnt: **React + TypeScript + JavaScript +  Shadcn/ui + Tailwind CSS + Plotly**
-
-- BackEnd: **Server Node.js + Next.js + Js + Ts + Python**
-
-- Data Analysis & Data Science: **Python + JupiterNotebook + Airflow**
-
-
----
-
-
-## 📋Algoritmos de Data Analysis & Data Science a Utilizar Via Python
-
-- XGBoost / LightGBM
-- Simulación Monte Carlo
-- Isolation Forest
-- K-Means Clustering 
-
-
----
-
-
-## 📋Tipos de Modelos de GenAI a Utilizar en el Stack
-
-- LLMs + OCR
-- STT
-
-
----
-
-
-## 📋Tipos de provedores de Modelos de IA
-
-Dependiendo de la naturaleza los datos a procesar se puede optar por un proveedor u otro
-
-- Self-Hosted / On Premise (Ollama+Llama)
-- Cloud APIs (ChatGPT, Google, Grok, Claude, Etc)
-
-
----
-
-
-## Compatibilidad de Provedores de LLM Cloud
-
-- OpenAI: Ofrece soporte completo para los modelos GPT-4, GPT-4o, GPT-3.5-Turbo y otros, administrados mediante la API.
-
-- Anthropic: Se integra con los modelos Claude (Claude 3.5 Sonnet, Claude 3 Opus).
-
-- Google Gemini: Permite el soporte directo para los modelos Gemini Pro y Flash a través de Google AI Studio.
-
-- AWS Bedrock & Azure OpenAI: Permite la integración de modelos de IA alojados en servicios de nube empresarial, ideal para entornos con alta seguridad y escalabilidad.
-
-- OpenRouter: Ofrece acceso a una amplia variedad de modelos a través de una API unificada. 
-
-
----
-
-
-## 📋Tipos de Sistemas Previstos a Construir sobre GenAI
-
-- RAG
-- NER
-
-
----
-
-
-## Tipos de APIs
-
-- REST
-- WebSocket
-- GraphQL
-
-
----
-
-
-## Logica del Negocio en el BackEnd
-
-- Bus de eventos LIS↔RIS↔Admisión → Redis Streams. Cada área publica eventos: PATIENT_ADMITTED, SAMPLE_TAKEN, STUDY_COMPLETE. El backend Node.js consume y orquesta. 
-
-- Motor predicción ETAs dinámicos → Python + XGBoost. Modelo entrenado con histórico de tiempos por estudio/turno/día. Re-inferencia cada 60s vía API REST al backend.
-
-- Orquestador trayecto Flujo end-to-end → N8N + LangGraph. N8N maneja flujos de negocio (notificar, escalar, reasignar). LangGraph maneja flujos conversacionales del chatbot. 
-
-- Tracking interfaz Visibilidad paciente → React + WebSocket + WhatsApp WebSocket pushea estado en tiempo real al frontend. WhatsApp envía notificaciones push sin app instalada. Conteo de ocupación por zona, alertas personalizadas indicativas, no clínicas.
-
----
-
-
-## Tipos de Perfiles de Usuario
-
-- Paciente
-- Personal
-- Administrador
-
-
----
-
-
-## Interfaces UI/UX
-
-- GUI Web (Express.js + React + Ts + Js)
-- WhatsApp/Telegram
-- Pantallas con accesos a Open WebUI8 para acceso a Bot
+<p align="center">
+  <strong>NEURALYTICS · CAREFLOW 360° · TALENT HACKATHON 2026 · SALUD DIGNA · GENIUS ARENA</strong>
+</p>
 
 
 ---
