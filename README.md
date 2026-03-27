@@ -642,7 +642,7 @@ careflow-360/
 
 La filosofía de CareFlow 360° se sustenta en cuatro pilares que se sostienen mutuamente:
 
-**Pilar I — Soberanía:** Soberanía de datos, cumplimiento legal y ético, y seguridad de la información. Toda la gestión de datos clínicos respeta la privacidad, las normativas vigentes y los estándares de protección nacionales e internacionales. LLM local, sin APIs externas, sin licencias de terceros.
+**Pilar I — Seguridad:** Soberanía de datos, cumplimiento legal y ético, y seguridad de la información. Toda la gestión de datos clínicos respeta la privacidad, las normativas vigentes y los estándares de protección nacionales e internacionales. LLM local, sin APIs externas, sin licencias de terceros.
 
 **Pilar II — Ingeniería:** Enfoque DevOps y MLOps apoyado en arquitecturas de microservicios, Infraestructura como Código y tecnologías Open Source. Despliegues reproducibles, escalabilidad horizontal y mantenimiento eficiente. SCRUM con sprints de 48 horas durante el hackathon.
 
