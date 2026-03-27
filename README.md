@@ -64,7 +64,7 @@ La inspiración conceptual converge en tres paradigmas de experiencia digital qu
 
 ## 2. El Problema
 
-Salud Digna opera bajo una arquitectura modular y distribuida — LIS (laboratorio), RIS/PACS (imagenología) y un HIS ligero para admisión — donde cada área funciona como un silo independiente. No existe un flujo de eventos compartido ni una capa de orquestación que sincronice las operaciones hacia el paciente en tiempo real.
+Salud Digna parece operar bajo una arquitectura modular y distribuida — LIS (laboratorio), RIS/PACS (imagenología) y un HIS ligero para admisión — donde cada área funciona como un silo independiente. No existe un flujo de eventos compartido ni una capa de orquestación que sincronice las operaciones hacia el paciente en tiempo real.
 
 ```
 MAPA DEL TRAYECTO ACTUAL
