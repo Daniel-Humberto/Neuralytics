@@ -682,7 +682,7 @@ Equipo multidisciplinario de Ingenieros en Software con especialidades complemen
 
 
 <p align="center">
-  <strong>TalentLand 2026 · Talent Hackathon 2026 · Genius Arena · Salud Digna · Track: Atención 360° en Tiempo Real</strong>
+  <strong>Talent Hackathon 2026 · Genius Arena · Salud Digna · Atención 360° en Tiempo Real</strong>
 </p>
 
 
