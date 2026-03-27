@@ -532,7 +532,7 @@ TRAYECTO COMPLETO CON CAREFLOW 360°
 
 ## 14. Cumplimiento Legal y Regulatorio
 
-CareFlow 360° está diseñado con cumplimiento normativo desde la arquitectura, no como capa posterior.
+CareFlow 360° está diseñado contemplando el cumplimiento normativo a futuro desde la arquitectura, no como capa posterior.
 
 | Marco Regulatorio | Aplicación en el Sistema |
 |---|---|
