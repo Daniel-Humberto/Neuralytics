@@ -664,7 +664,9 @@ La filosofía de CareFlow 360° se sustenta en cuatro pilares que se sostienen m
 
 ## 18. Equipo Neuralytics
 
-Equipo multidisciplinario de Ingenieros en Software con especialidades complementarias, formado para abordar de manera integral el desafío del track: desde interfaces gráficas intuitivas y accesibles hasta modelos predictivos robustos y despliegue reproducible mediante microservicios e infraestructura como código.
+Somos Neuralytics, un equipo multidisciplinario que está compuesto por Ingenieros en Software con especialidad en diferentes áreas cada uno. Entre las que destacan Desarrollo Web Full-Stack, Data Analysis & Data Science, y ML Ops & AI Ops.
+
+Esta combinación nos permite abordar de manera integral el desafío del Track. Desde la creación de interfaces graficas intuitivas y accesibles para pacientes y personal, hasta la implementación de modelos predictivos robustos y el despliegue reproducible de soluciones escalables mediante microservicios e infraestructura como código.
 
 
 ---
