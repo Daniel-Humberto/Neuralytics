@@ -654,6 +654,14 @@ La filosofía de CareFlow 360° se sustenta en cuatro pilares que se sostienen m
 ---
 
 
+<p align="center">
+  <img width="1388" height="1232" alt="imagen" src="https://github.com/user-attachments/assets/9504c4da-7598-4120-aefb-433a62b5b60b" />
+</p>
+
+
+---
+
+
 ## 18. Equipo Neuralytics
 
 Equipo multidisciplinario de Ingenieros en Software con especialidades complementarias, formado para abordar de manera integral el desafío del track: desde interfaces gráficas intuitivas y accesibles hasta modelos predictivos robustos y despliegue reproducible mediante microservicios e infraestructura como código.
