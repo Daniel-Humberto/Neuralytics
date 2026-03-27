@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-#  agentai-ops.sh  —  Agent AI Ops V15  |  Infrastructure as Code
-#  Gestión completa del stack: instalar · levantar · bajar · destruir · verificar
+#   Neuralytics CareFlow 360°  La capa de orquestación inteligente V1  
 # ==============================================================================
 set -euo pipefail
 IFS=$'\n\t'
