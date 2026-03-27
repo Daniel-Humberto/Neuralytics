@@ -674,7 +674,7 @@ Equipo multidisciplinario de Ingenieros en Software con especialidades complemen
 
 
 <p align="center">
-  <strong>Neuralytics · CareFlow 360° · Talent Hackathob 2026 · Salud Digna · Genius Arena</strong>
+  <strong>Neuralytics · CareFlow 360° · Talent Hackathon 2026 · Salud Digna · Genius Arena</strong>
 </p>
 
 
