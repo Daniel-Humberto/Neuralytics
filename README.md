@@ -674,7 +674,7 @@ Equipo multidisciplinario de Ingenieros en Software con especialidades complemen
 
 
 <p align="center">
-  <strong>Neuralytics · CareFlow 360° · Talent Hackathon 2026 · Salud Digna · Genius Arena</strong>
+  <sub>Mariana Elizabeth Reyes Rocha - Daniel Humberto Reyes Rocha - Alan de Jesus Nieto Cardenas - Alan Manuel Medina Solis</sub>
 </p>
 
 
@@ -682,7 +682,7 @@ Equipo multidisciplinario de Ingenieros en Software con especialidades complemen
 
 
 <p align="center">
-  <sub>Mariana Elizabeth Reyes Rocha - Daniel Humberto Reyes Rocha - Alan de Jesus Nieto Cardenas - Alan Manuel Medina Solis</sub>
+  <strong>TalentLand 2026 · Talent Hackathon 2026 · Genius Arena · Salud Digna · Track: Atención 360° en Tiempo Real</strong>
 </p>
 
 
