@@ -581,14 +581,6 @@ Con más de 240 clínicas en red, 32 estados y presencia en 4 países, cualquier
 El sistema completo se levanta con un único comando mediante el script `install.sh`:
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/neuralytics/careflow-360.git
-cd careflow-360
-
-# Configurar variables de entorno
-cp .env.example .env
-# Editar .env con parámetros de la sucursal
-
 # Levantar el stack completo
 bash install.sh
 
