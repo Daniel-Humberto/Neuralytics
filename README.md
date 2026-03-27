@@ -309,7 +309,6 @@ Airflow orquesta tres categorías de pipelines nocturnos:
 
 - **ETL de datos clínicos:** Extracción y limpieza de registros de trayectos completados desde PostgreSQL.
 - **Reentrenamiento de modelos:** XGBoost, Isolation Forest y K-Means se reentrenan con los datos del día anterior. Los datos provienen exclusivamente del personal clínico (control total del inicio y fin de cada fase), garantizando ausencia de ruido.
-- **Generación de embeddings:** Procesamiento de documentos de la base de conocimiento oficial de Salud Digna hacia Qdrant para el pipeline RAG.
 
 
 ---
