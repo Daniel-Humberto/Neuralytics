@@ -679,3 +679,11 @@ Equipo multidisciplinario de Ingenieros en Software con especialidades complemen
 
 
 ---
+
+
+<p align="center">
+  <sub>Mariana Elizabeth Reyes Rocha - Daniel Humberto Reyes Rocha - Alan de Jesus Nieto Cardenas - Alan Manuel Medina Solis</sub>
+</p>
+
+
+---
