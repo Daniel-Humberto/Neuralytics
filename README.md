@@ -423,7 +423,7 @@ Agente de inteligencia operativa para administradores. Responde preguntas estrat
 - RAG vectorial sobre Qdrant GPU con embeddings del corpus oficial de Salud Digna.
 - Guardrails configurables y auditables.
 - Transcripción de voz en tiempo real con Faster-Whisper.
-- Supervisión humana activa (HITL) en todos los flujos conversacionales.
+- Supervisión humana activa (HITL) en algunos flujos conversacionales.
 - Auditoría completa de mensajes con timestamps en PostgreSQL.
 - Cumplimiento LFPDPPP, NOM-024-SSA3, Principios Chapultepec (SECIHTI 2026).
 
