@@ -1,0 +1,95 @@
+
+<style>
+  .wrapper { padding: 16px 0; font-family: var(--font-sans); }
+  .header { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; text-align: center; padding: 14px 20px; margin-bottom: 20px; }
+  .header-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .header-sub { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .pillar { border-radius: 14px; padding: 16px 12px; }
+  .p1 { background: #3C3489; border: 0.5px solid #534AB7; }
+  .p2 { background: #085041; border: 0.5px solid #0F6E56; }
+  .p3 { background: #712B13; border: 0.5px solid #993C1D; }
+  .p4 { background: #0C447C; border: 0.5px solid #185FA5; }
+  .pillar-label { font-size: 11px; font-weight: 400; text-align: center; margin: 0 0 2px; }
+  .p1 .pillar-label { color: #AFA9EC; }
+  .p2 .pillar-label { color: #5DCAA5; }
+  .p3 .pillar-label { color: #F0997B; }
+  .p4 .pillar-label { color: #85B7EB; }
+  .pillar-title { font-size: 15px; font-weight: 500; text-align: center; margin: 0 0 14px; }
+  .p1 .pillar-title { color: #EEEDFE; }
+  .p2 .pillar-title { color: #E1F5EE; }
+  .p3 .pillar-title { color: #FAECE7; }
+  .p4 .pillar-title { color: #E6F1FB; }
+  .tag { border-radius: 8px; padding: 7px 10px; margin-bottom: 8px; text-align: center; font-size: 11px; line-height: 1.4; cursor: pointer; transition: opacity .15s; }
+  .tag:hover { opacity: .82; }
+  .tag:last-child { margin-bottom: 0; }
+  .p1 .tag { background: rgba(206,203,246,0.14); border: 0.5px solid #534AB7; color: #CECBF6; }
+  .p2 .tag { background: rgba(93,202,165,0.12); border: 0.5px solid #0F6E56; color: #9FE1CB; }
+  .p3 .tag { background: rgba(240,153,123,0.12); border: 0.5px solid #993C1D; color: #F5C4B3; }
+  .p4 .tag { background: rgba(133,183,235,0.12); border: 0.5px solid #185FA5; color: #B5D4F4; }
+</style>
+<div class="wrapper">
+  <div class="header">
+    <p class="header-title">Filosofía Neuralytics — Ruta Digna 360</p>
+    <p class="header-sub">Cuatro pilares que se sostienen mutuamente</p>
+  </div>
+  <div class="grid">
+
+    <!-- PILAR I -->
+    <div class="pillar p1">
+      <p class="pillar-label">Pilar I</p>
+      <p class="pillar-title">Soberanía</p>
+      <div class="tag" onclick="sendPrompt('Cómo implementa Ruta Digna 360 la soberanía de datos concretamente?')">Soberanía de datos</div>
+      <div class="tag" onclick="sendPrompt('Qué requieren LFPDPPP y NOM-024 para un sistema como Ruta Digna 360?')">LFPDPPP · NOM-024</div>
+      <div class="tag" onclick="sendPrompt('Cómo se alinea la propuesta con Chapultepec y el White House AI Framework 2026?')">Chapultepec · WH AI 2026</div>
+      <div class="tag" onclick="sendPrompt('Por qué JCI, CAP e ISO 15189 son relevantes para Ruta Digna 360?')">JCI · CAP · ISO 15189</div>
+      <div class="tag" onclick="sendPrompt('Cómo funciona la pseudonimización por token de trayecto?')">Pseudonimización token</div>
+      <div class="tag" onclick="sendPrompt('Por qué inferir el LLM localmente es una garantía estructural de soberanía?')">LLM local · sin APIs ext.</div>
+      <div class="tag" onclick="sendPrompt('Cómo funcionan los guardrails y el Human-in-the-Loop juntos?')">Guardrails · HITL</div>
+      <div class="tag" onclick="sendPrompt('Qué se registra en PostgreSQL para garantizar auditoría completa?')">Auditoría PostgreSQL · timestamps</div>
+    </div>
+
+    <!-- PILAR II -->
+    <div class="pillar p2">
+      <p class="pillar-label">Pilar II</p>
+      <p class="pillar-title">Ingeniería</p>
+      <div class="tag" onclick="sendPrompt('Cómo se aplica DevOps, MLOps y AI Ops en Ruta Digna 360?')">DevOps · MLOps · AI Ops</div>
+      <div class="tag" onclick="sendPrompt('Qué microservicios componen el sistema y cómo se comunican?')">Microservicios · Docker</div>
+      <div class="tag" onclick="sendPrompt('Cómo permite IaC replicar el sistema en una nueva clínica sin configuración manual?')">IaC · docker-compose</div>
+      <div class="tag" onclick="sendPrompt('Por qué el stack 100% open source es una ventaja estratégica para Salud Digna?')">Open source · sin licencias</div>
+      <div class="tag" onclick="sendPrompt('Qué métricas expone Prometheus y qué dashboards tiene Grafana?')">Prometheus · Grafana</div>
+      <div class="tag" onclick="sendPrompt('Cómo funciona el pipeline de reentrenamiento de modelos con Airflow?')">Airflow · reentrenamiento ML</div>
+      <div class="tag" onclick="sendPrompt('Cómo se aplica SCRUM en 48 horas de hackathon?')">SCRUM · sprints 48h</div>
+      <div class="tag" onclick="sendPrompt('En qué condiciones conviene On-premise vs cloud para Salud Digna?')">Self-hosted · On-premise · cloud</div>
+    </div>
+
+    <!-- PILAR III -->
+    <div class="pillar p3">
+      <p class="pillar-label">Pilar III</p>
+      <p class="pillar-title">Inteligencia</p>
+      <div class="tag" onclick="sendPrompt('Cómo funciona la arquitectura event-driven con Redis Streams en Ruta Digna 360?')">Event-driven · Redis Streams</div>
+      <div class="tag" onclick="sendPrompt('Por qué WebSocket y no polling para la comunicación en tiempo real?')">WebSocket · tiempo real</div>
+      <div class="tag" onclick="sendPrompt('Cómo calcula XGBoost los ETAs y con qué frecuencia re-infiere?')">XGBoost · ETA dinámico</div>
+      <div class="tag" onclick="sendPrompt('Cómo detecta Isolation Forest un cuello de botella antes de que sea visible?')">Isolation Forest · anomalías</div>
+      <div class="tag" onclick="sendPrompt('Qué aporta Monte Carlo a los ETAs que XGBoost solo no da?')">Monte Carlo · confianza</div>
+      <div class="tag" onclick="sendPrompt('Cómo funciona el RAG con Qdrant y Ollama localmente?')">RAG · Qdrant · Ollama</div>
+      <div class="tag" onclick="sendPrompt('Qué agentes coordina LangGraph y cómo se comunican entre sí?')">Multi-agent · LangGraph</div>
+      <div class="tag" onclick="sendPrompt('Cómo estima RuView la ocupación por área sin cámaras ni identificación personal?')">RuView WiFi · presencia anónima</div>
+    </div>
+
+    <!-- PILAR IV -->
+    <div class="pillar p4">
+      <p class="pillar-label">Pilar IV</p>
+      <p class="pillar-title">Interfaces</p>
+      <div class="tag" onclick="sendPrompt('Qué principios de UX garantizan que Ruta Digna 360 sea usable para adultos mayores?')">Accesible · todo tipo de usuario</div>
+      <div class="tag" onclick="sendPrompt('Cómo está diseñada la interfaz del paciente para minimizar fricción?')">UI Paciente · fila virtual</div>
+      <div class="tag" onclick="sendPrompt('Qué acciones del personal clínico son de un solo toque?')">UI Personal · un solo toque</div>
+      <div class="tag" onclick="sendPrompt('Qué visualizaciones tiene el dashboard del administrador?')">UI Admin · dashboard KPIs</div>
+      <div class="tag" onclick="sendPrompt('Por qué WhatsApp y OpenWebUI como canales principales del asistente?')">WhatsApp · OpenWebUI</div>
+      <div class="tag" onclick="sendPrompt('Cómo funciona la sala de espera virtual y el check-in por QR?')">QR check-in · sala virtual</div>
+      <div class="tag" onclick="sendPrompt('Qué contenido educativo recibe el paciente durante su espera?')">Contenido educativo</div>
+      <div class="tag" onclick="sendPrompt('Cómo se adapta la interfaz al personal existente sin curva de aprendizaje?')">Sin curva de aprendizaje</div>
+    </div>
+
+  </div>
+</div>
